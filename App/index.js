@@ -1,53 +1,75 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+// Filename: index.js
+// Combined code from all files
 
-const App = () => {
-  const fullText = 'Hi, this is Apply.\nCreating mobile apps is now as simple as typing text.\nJust input your idea and press APPLY, and our platform does the rest...';
-  const [displayedText, setDisplayedText] = useState('');
-  const [index, setIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+// Filename begin: App.js
+import React, { useState } from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
-  useEffect(() => {
-    if (isPaused) return;
+const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
-    const interval = setInterval(() => {
-      setDisplayedText((prev) => prev + fullText[index]);
-      setIndex((prev) => {
-        if (prev === fullText.length - 1) {
-          setIsPaused(true);
-          setTimeout(() => {
-            setDisplayedText('');
-            setIndex(0);
-            setIsPaused(false);
-          }, 2000);
-          return 0;
-        }
-        return prev + 1;
-      });
-    }, 100);
+export default function App() {
+  const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
 
-    return () => clearInterval(interval);
-  }, [index, isPaused]);
+  const nextLetter = () => {
+    setCurrentLetterIndex((prevIndex) => (prevIndex + 1) % letters.length);
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{displayedText}</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.letterBox}>
+          <Text style={styles.letter}>{letters[currentLetterIndex]}</Text>
+        </View>
+        <TouchableOpacity onPress={nextLetter} style={styles.button}>
+          <Text style={styles.buttonText}>Next Letter</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'black',
-    padding: 20,
+    marginTop: 45,
+    backgroundColor: '#f0f8ff',
   },
-  text: {
-    color: 'white',
-    fontSize: 24,
-    fontFamily: 'monospace',
+  scrollContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+  },
+  letterBox: {
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#c0c0c0',
+    padding: 50,
+    marginVertical: 20,
+  },
+  letter: {
+    fontSize: 100,
+    fontWeight: 'bold',
+    color: '#0000ff',
+  },
+  button: {
+    backgroundColor: '#008000',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 10,
+    marginVertical: 20,
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
-
-export default App;
+// Filename end: App.js
